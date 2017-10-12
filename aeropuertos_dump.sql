@@ -18,6 +18,20 @@ USE `aeropuertos_argentina`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `CheckIn`
+--
+
+DROP TABLE IF EXISTS `CheckIn`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CheckIn` (
+  `idCheckIn` int(11) NOT NULL,
+  `estado` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idCheckIn`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `Pasajero`
 --
 
@@ -33,6 +47,36 @@ CREATE TABLE `Pasajero` (
   PRIMARY KEY (`idPasajero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `RegistroPasajero`
+--
+
+DROP TABLE IF EXISTS `RegistroPasajero`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `RegistroPasajero` (
+  `idRegistroPasajero` int(11) NOT NULL,
+  PRIMARY KEY (`idRegistroPasajero`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Reserva`
+--
+
+DROP TABLE IF EXISTS `Reserva`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Reserva` (
+  `codigoReserva` int(11) NOT NULL,
+  `estadoReserva` varchar(30) NOT NULL,
+  `fechaConfirmacion` datetime DEFAULT NULL,
+  `fechaCancelacion` datetime DEFAULT NULL,
+  `clase` varchar(30) NOT NULL,
+  PRIMARY KEY (`codigoReserva`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -43,4 +87,4 @@ CREATE TABLE `Pasajero` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-11 21:37:12
+-- Dump completed on 2017-10-11 21:50:51
