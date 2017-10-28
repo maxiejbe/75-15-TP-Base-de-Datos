@@ -131,7 +131,9 @@ CREATE TABLE IF NOT EXISTS Layout (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS Asiento (
-  codigoAsiento int(11) NOT NULL,
+  codigoAsiento int(11) NOT NULL AUTO_INCREMENT,
+  nroFila int(11) NOT NULL,
+  nroColumna int(11) NOT NULL,
   clase varchar(20) not null,
   esSalidaEmergencia bool not null,
   seccion varchar(20),

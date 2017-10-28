@@ -1,6 +1,18 @@
 DELIMITER //
 CREATE PROCEDURE Cargar_datos_iniciales()
 BEGIN
+	declare iterador_fila int unsigned default 1;
+    declare iterador_columna int unsigned default 1;
+    declare iterador_aeronave int unsigned default 1;
+    declare iterador_layout int unsigned default 1;
+    declare iterador_vuelo int unsigned default 1;
+    declare iterador_instancia_vuelo int unsigned default 1;
+    
+    declare clase varchar(20);
+    
+    declare cantidad_filas int unsigned default 1;
+    declare cantidad_columnas int unsigned default 1;
+    	
 	/* Cargar al menos 15 Aerolíneas, 7 de Cabotaje y 8 Internacionales */
 
 	/*Aerolineas de cabotaje*/
@@ -168,6 +180,49 @@ BEGIN
 
 	INSERT INTO Aeropuerto VALUES ('FCO', 'Aeropuerto de Roma-Fiumicino', '', 8);
 	INSERT INTO AeropuertoExterno VALUES (NULL, '', 'Italia', 'FCO');
+    
+    /*Cargar al menos 150 Aeronaves, 10 en promedio para cada Aerolínea (no es
+	necesario que todas que tengan 10, pero al menos, una aeronave), con al
+	menos 3 Layouts distintos*/
+	while iterador_layout <= 3 do
+		set cantidad_filas = ROUND((RAND() * (30-10))+10); 
+		set cantidad_columnas = ROUND((RAND() * (8-4))+4);
+		
+		INSERT INTO Layout values (NULL, CONCAT('Layout ', iterador_layout), cantidad_filas, cantidad_columnas);
+		set iterador_layout=iterador_layout+1;
+        
+		set iterador_fila=1;
+        
+		while iterador_fila <= cantidad_filas do
+			set clase='TURISTA';
+            IF iterador_fila<=4 THEN
+            	set clase='PRIMERA_CLASE';
+			END IF;
+            
+            IF iterador_fila>4 AND iterador_fila<=6 THEN
+				set clase='BUSINESS';
+			END IF;
+			
+            set iterador_columna=1;
+            while iterador_columna <= cantidad_columnas do
+				INSERT INTO Asiento VALUES (NULL, iterador_fila, iterador_columna, clase, false, '', iterador_layout - 1);
+				set iterador_columna=iterador_columna+1;
+            end while;
+            
+            set iterador_fila=iterador_fila+1;
+		end while;
+        
+	end while;
+    
+    while iterador_aeronave <= 100 do
+	    INSERT INTO Aeronave values((SELECT LEFT(UUID(), 6)),60, 10000, ROUND((RAND() * (3-1))+1));
+		set iterador_aeronave=iterador_aeronave+1;
+    end while;
+    
+	/*
+    Cargar al menos 100 vuelos, donde el 15% sean internacionales (con Terminal
+	de Destino en Terminales no propias)
+	*/
     
     
 
