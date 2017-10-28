@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS Aeropuerto (
   codigoAeropuerto varchar(3) NOT NULL,
   nombre varchar(50) not null,
   codigoInternacionalIATA varchar(3) not null,
+  cantidadPuertas int not null,
   PRIMARY KEY (codigoAeropuerto)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -45,20 +46,12 @@ CREATE TABLE IF NOT EXISTS Aerolinea (
   PRIMARY KEY (codigoAerolinea)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS TerminalAeroportuaria (
-  idTerminalAeroportuaria int(11) NOT NULL AUTO_INCREMENT,
-  cantidadPuertas int not null,
-  codigoAeropuerto varchar(3) NOT NULL,
-  PRIMARY KEY (idTerminalAeroportuaria),
-  FOREIGN KEY fk_Aeropuerto(codigoAeropuerto) REFERENCES Aeropuerto(codigoAeropuerto)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-CREATE TABLE IF NOT EXISTS Aerolinea_TerminalAeroportuaria (
+CREATE TABLE IF NOT EXISTS Aerolinea_Aeropuerto (
   codigoAerolinea varchar(2) not null,
-  idTerminalAeroportuaria int(11) NOT NULL,
-  PRIMARY KEY (codigoAerolinea, idTerminalAeroportuaria),
+  codigoAeropuerto varchar(3) NOT NULL,
+  PRIMARY KEY (codigoAerolinea, codigoAeropuerto),
   FOREIGN KEY fk_Aerolinea(codigoAerolinea) REFERENCES Aerolinea(codigoAerolinea),
-  FOREIGN KEY fk_TerminalAeroportuaria(idTerminalAeroportuaria) REFERENCES TerminalAeroportuaria(idTerminalAeroportuaria)
+  FOREIGN KEY fk_Aeropuerto(codigoAeropuerto) REFERENCES Aeropuerto(codigoAeropuerto)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -76,12 +69,10 @@ CREATE TABLE IF NOT EXISTS Vuelo (
   codigoAerolinea varchar(2) not null,
   codigoAeropuertoOrigen varchar(3) not null,
   codigoAeropuertoDestino varchar(3) not null,
-  idTerminalAeroportuaria int(11) NOT NULL,
   PRIMARY KEY (idVuelo),
   FOREIGN KEY fk_Aerolinea(codigoAerolinea) REFERENCES Aerolinea(codigoAerolinea),
   FOREIGN KEY fk_Aeropuerto_Origen(codigoAeropuertoOrigen) REFERENCES Aeropuerto(codigoAeropuerto),
-  FOREIGN KEY fk_Aeropuerto_Destino(codigoAeropuertoDestino) REFERENCES Aeropuerto(codigoAeropuerto),
-  FOREIGN KEY fk_TerminalAeroportuaria(idTerminalAeroportuaria) REFERENCES TerminalAeroportuaria(idTerminalAeroportuaria)
+  FOREIGN KEY fk_Aeropuerto_Destino(codigoAeropuertoDestino) REFERENCES Aeropuerto(codigoAeropuerto)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS InstanciaVuelo (
