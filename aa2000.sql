@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS Pasajero (
 
 
 CREATE TABLE IF NOT EXISTS Aeropuerto (
-  codigoAeropuerto int(11) NOT NULL AUTO_INCREMENT,
+  codigoAeropuerto varchar(3) NOT NULL,
   nombre varchar(50) not null,
   codigoInternacionalIATA varchar(3) not null,
   PRIMARY KEY (codigoAeropuerto)
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS AeropuertoArgentino (
   provincia varchar(20) NOT NULL,
   categoria varchar(20) NOT NULL,
   codigoInternacionalFAA varchar(3) not null,
-  codigoAeropuerto int(11) NOT NULL,
+  codigoAeropuerto varchar(3) NOT NULL,
   PRIMARY KEY (codigoAeropuertoArgentino),
   FOREIGN KEY fk_Aeropuerto(codigoAeropuerto) REFERENCES Aeropuerto(codigoAeropuerto)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS AeropuertoExterno (
   codigoAeropuertoExterno int(11) NOT NULL AUTO_INCREMENT,
   region varchar(20) NOT NULL,
   pais varchar(20) NOT NULL,
-  codigoAeropuerto int(11) NOT NULL,
+  codigoAeropuerto varchar(3) NOT NULL,
   PRIMARY KEY (codigoAeropuertoExterno),
   FOREIGN KEY fk_Aeropuerto(codigoAeropuerto) REFERENCES Aeropuerto(codigoAeropuerto)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS Aerolinea (
 CREATE TABLE IF NOT EXISTS TerminalAeroportuaria (
   idTerminalAeroportuaria int(11) NOT NULL AUTO_INCREMENT,
   cantidadPuertas int not null,
-  codigoAeropuerto int(11) NOT NULL,
+  codigoAeropuerto varchar(3) NOT NULL,
   PRIMARY KEY (idTerminalAeroportuaria),
   FOREIGN KEY fk_Aeropuerto(codigoAeropuerto) REFERENCES Aeropuerto(codigoAeropuerto)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -74,8 +74,8 @@ CREATE TABLE IF NOT EXISTS Personal (
 CREATE TABLE IF NOT EXISTS Vuelo (
   idVuelo int(11) NOT NULL AUTO_INCREMENT,
   codigoAerolinea varchar(2) not null,
-  codigoAeropuertoOrigen int(11) not null,
-  codigoAeropuertoDestino int(11) not null,
+  codigoAeropuertoOrigen varchar(3) not null,
+  codigoAeropuertoDestino varchar(3) not null,
   idTerminalAeroportuaria int(11) NOT NULL,
   PRIMARY KEY (idVuelo),
   FOREIGN KEY fk_Aerolinea(codigoAerolinea) REFERENCES Aerolinea(codigoAerolinea),
