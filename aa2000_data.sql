@@ -7,11 +7,17 @@ BEGIN
     declare iterador_layout int unsigned default 1;
     declare iterador_vuelo int unsigned default 1;
     declare iterador_instancia_vuelo int unsigned default 1;
+    declare iterador_aerolinea int unsigned default 1;
     
     declare clase varchar(20);
     declare origen varchar(3);
     declare destino varchar(3);
     declare aerolinea varchar(2);
+    
+    declare personal int(11);
+    
+    declare estadoInstancia varchar(20);
+    declare fechaInstancia date;
     
     declare cantidad_filas int unsigned default 1;
     declare cantidad_columnas int unsigned default 1;
@@ -36,7 +42,69 @@ BEGIN
 	INSERT INTO Aerolinea VALUES('BR', 'British Airways');
 	INSERT INTO Aerolinea VALUES('CO', 'Copa');
 	INSERT INTO Aerolinea VALUES('EM', 'Emirates');
-
+    
+    /*Cargar al menos 3 operadores por Aerolínea*/
+	INSERT INTO Personal VALUES(NULL, 'test1@aa2000.com', 'testing', 'AA');
+    INSERT INTO Personal VALUES(NULL, 'test2@aa2000.com', 'testing', 'AA');
+    INSERT INTO Personal VALUES(NULL, 'test3@aa2000.com', 'testing', 'AA');
+    
+    INSERT INTO Personal VALUES(NULL, 'test4@aa2000.com', 'testing', 'AU');
+    INSERT INTO Personal VALUES(NULL, 'test5@aa2000.com', 'testing', 'AU');
+    INSERT INTO Personal VALUES(NULL, 'test6@aa2000.com', 'testing', 'AU');
+    
+    INSERT INTO Personal VALUES(NULL, 'test7@aa2000.com', 'testing', 'GO');
+    INSERT INTO Personal VALUES(NULL, 'test8@aa2000.com', 'testing', 'GO');
+    INSERT INTO Personal VALUES(NULL, 'test9@aa2000.com', 'testing', 'GO');
+    
+    INSERT INTO Personal VALUES(NULL, 'test10@aa2000.com', 'testing', 'TA');
+    INSERT INTO Personal VALUES(NULL, 'test11@aa2000.com', 'testing', 'TA');
+    INSERT INTO Personal VALUES(NULL, 'test12@aa2000.com', 'testing', 'TA');
+    
+    INSERT INTO Personal VALUES(NULL, 'test13@aa2000.com', 'testing', 'AN');
+    INSERT INTO Personal VALUES(NULL, 'test14@aa2000.com', 'testing', 'AN');
+    INSERT INTO Personal VALUES(NULL, 'test15@aa2000.com', 'testing', 'AN');
+    
+    INSERT INTO Personal VALUES(NULL, 'test16@aa2000.com', 'testing', 'MA');
+    INSERT INTO Personal VALUES(NULL, 'test17@aa2000.com', 'testing', 'MA');
+    INSERT INTO Personal VALUES(NULL, 'test18@aa2000.com', 'testing', 'MA');
+    
+    INSERT INTO Personal VALUES(NULL, 'test17@aa2000.com', 'testing', 'AM');
+    INSERT INTO Personal VALUES(NULL, 'test18@aa2000.com', 'testing', 'AM');
+    INSERT INTO Personal VALUES(NULL, 'test19@aa2000.com', 'testing', 'AM');
+    
+    
+    INSERT INTO Personal VALUES(NULL, 'test20@aa2000.com', 'testing', 'AC');
+    INSERT INTO Personal VALUES(NULL, 'test21@aa2000.com', 'testing', 'AC');
+    INSERT INTO Personal VALUES(NULL, 'test22@aa2000.com', 'testing', 'AC');
+    
+	INSERT INTO Personal VALUES(NULL, 'test23@aa2000.com', 'testing', 'AF');
+    INSERT INTO Personal VALUES(NULL, 'test24@aa2000.com', 'testing', 'AF');
+    INSERT INTO Personal VALUES(NULL, 'test25@aa2000.com', 'testing', 'AF');
+    
+	INSERT INTO Personal VALUES(NULL, 'test26@aa2000.com', 'testing', 'AE');
+    INSERT INTO Personal VALUES(NULL, 'test27@aa2000.com', 'testing', 'AE');
+    INSERT INTO Personal VALUES(NULL, 'test28@aa2000.com', 'testing', 'AE');
+    
+	INSERT INTO Personal VALUES(NULL, 'test29@aa2000.com', 'testing', 'AV');
+    INSERT INTO Personal VALUES(NULL, 'test30@aa2000.com', 'testing', 'AV');
+    INSERT INTO Personal VALUES(NULL, 'test31@aa2000.com', 'testing', 'AV');
+    
+	INSERT INTO Personal VALUES(NULL, 'test32@aa2000.com', 'testing', 'AL');
+    INSERT INTO Personal VALUES(NULL, 'test33@aa2000.com', 'testing', 'AL');
+    INSERT INTO Personal VALUES(NULL, 'test34@aa2000.com', 'testing', 'AL');
+    
+    INSERT INTO Personal VALUES(NULL, 'test35@aa2000.com', 'testing', 'BR');
+    INSERT INTO Personal VALUES(NULL, 'test36@aa2000.com', 'testing', 'BR');
+    INSERT INTO Personal VALUES(NULL, 'test37@aa2000.com', 'testing', 'BR');
+    
+    INSERT INTO Personal VALUES(NULL, 'test38@aa2000.com', 'testing', 'CO');
+    INSERT INTO Personal VALUES(NULL, 'test39@aa2000.com', 'testing', 'CO');
+    INSERT INTO Personal VALUES(NULL, 'test40@aa2000.com', 'testing', 'CO');
+    
+    INSERT INTO Personal VALUES(NULL, 'test41@aa2000.com', 'testing', 'EM');
+    INSERT INTO Personal VALUES(NULL, 'test42@aa2000.com', 'testing', 'EM');
+    INSERT INTO Personal VALUES(NULL, 'test43@aa2000.com', 'testing', 'EM');
+    
 	/*Cargar todas las terminales que figuran en la página de AA2000 (34 en la
 	actualidad) */
 
@@ -252,6 +320,24 @@ BEGIN
     INSERT INTO Aerolinea_Aeropuerto
     SELECT DISTINCT codigoAerolinea, codigoAeropuertoOrigen as codigoAeropuerto FROM Vuelo;
     
+    /*
+    Cargar al menos 1000 instancias de vuelos, distribuidos aleatoriamente entre
+	las fechas 01-07-2017 y 31-12-2017. Contemplar la carga de todos los estados
+	previos, dependiendo del estado actual (por ejemplo, si se carga una instancia
+	cuyo estado actual es Carga de Combustible, deben estar cargados los estados
+	previos Apertura, Asociación, Habilitación, etc.)
+    */
+    while iterador_instancia_vuelo <= 1000 do
+	    SET @MIN = '2017-07-01 00:00:00';
+        SET @MAX = '2017-12-31 23:59:59';
+        set fechaInstancia = (SELECT TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN));
+		set personal = (SELECT idPersonal FROM Personal ORDER BY RAND() LIMIT 1);
+        
+        /*Posible formato de idVuelo: CONCAT(aerolinea,1000 + iterador_vuelo)*/
+        INSERT INTO InstanciaVuelo values(NULL, fechaInstancia, fechaInstancia, fechaInstancia, 40, personal, ROUND((RAND() * (100-1))+1));
+		
+        set iterador_instancia_vuelo=iterador_instancia_vuelo+1;
+    end while;    
     
 
 END //
