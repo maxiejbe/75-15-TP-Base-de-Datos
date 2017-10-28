@@ -129,4 +129,3 @@ INSERT INTO TerminalAutogestion VALUES(3);
 INSERT INTO TerminalFisica VALUES(1);
 INSERT INTO TerminalFisica VALUES(2);
 INSERT INTO TerminalFisica VALUES(3);
-

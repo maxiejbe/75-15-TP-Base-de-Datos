@@ -15,4 +15,5 @@ LEFT JOIN
 	CheckIn ci
 ON
 	iv.idInstanciaVuelo = ci.idInstanciaVuelo;
+    /*AND ci.idPasajero  p.idPasajero*/
     
