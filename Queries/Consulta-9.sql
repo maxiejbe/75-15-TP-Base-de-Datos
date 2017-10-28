@@ -1,7 +1,7 @@
 /* 
 SELECT codigoAerolinea, nombre, MAX(cantidadCheckins) 
 FROM Consulta9 
-WHERE anoInstancia = 2017 AND mesInstancia = 2
+WHERE anoInstancia = 2017 AND mesInstancia = 7
 GROUP BY codigoAerolinea, nombre
 */
 
@@ -26,7 +26,7 @@ INNER JOIN
 	Reserva re
 ON
 	iv.idInstanciaVuelo = re.idInstanciaVuelo
-    AND re.estado = 'CONFIRMADO'
+    AND re.estado = 'CONFIRMADA'
 LEFT JOIN 
 	CheckIn ci
 ON
