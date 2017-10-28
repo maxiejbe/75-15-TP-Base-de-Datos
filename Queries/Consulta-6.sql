@@ -3,7 +3,7 @@
 CREATE VIEW Consulta6 AS
 	 
 SELECT 
-	a.codigoAerolinea, a.nombre, count(*) as cantidadAeropuertos, (SELECT COUNT(*) from Aeropuerto) as totalAeropuertos 
+	a.codigoAerolinea, a.nombre, count(aa.codigoAeropuerto) as cantidadAeropuertos, (SELECT COUNT(*) from Aeropuerto) as totalAeropuertos 
 FROM
 	Aerolinea a
 INNER JOIN
