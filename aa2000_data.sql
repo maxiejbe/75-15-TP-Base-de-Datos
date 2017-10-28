@@ -9,6 +9,9 @@ BEGIN
     declare iterador_instancia_vuelo int unsigned default 1;
     
     declare clase varchar(20);
+    declare origen varchar(3);
+    declare destino varchar(3);
+    declare aerolinea varchar(2);
     
     declare cantidad_filas int unsigned default 1;
     declare cantidad_columnas int unsigned default 1;
@@ -214,7 +217,7 @@ BEGIN
         
 	end while;
     
-    while iterador_aeronave <= 100 do
+    while iterador_aeronave <= 150 do
 	    INSERT INTO Aeronave values((SELECT LEFT(UUID(), 6)),60, 10000, ROUND((RAND() * (3-1))+1));
 		set iterador_aeronave=iterador_aeronave+1;
     end while;
@@ -223,6 +226,31 @@ BEGIN
     Cargar al menos 100 vuelos, donde el 15% sean internacionales (con Terminal
 	de Destino en Terminales no propias)
 	*/
+    while iterador_vuelo <= 85 do
+	    set aerolinea=(SELECT codigoAerolinea FROM Aerolinea ORDER BY RAND() LIMIT 1);
+        set origen=(SELECT codigoAeropuerto FROM AeropuertoArgentino ORDER BY RAND() LIMIT 1);
+        set destino=(SELECT codigoAeropuerto FROM AeropuertoArgentino ORDER BY RAND() LIMIT 1);
+        
+        /*Posible formato de idVuelo: CONCAT(aerolinea,1000 + iterador_vuelo)*/
+        INSERT INTO Vuelo values(NULL, aerolinea, origen, destino);
+		
+        set iterador_vuelo=iterador_vuelo+1;
+    end while;
+    
+    while iterador_vuelo <= 100 do
+	    set aerolinea=(SELECT codigoAerolinea FROM Aerolinea ORDER BY RAND() LIMIT 1);
+        set origen=(SELECT codigoAeropuerto FROM AeropuertoExterno ORDER BY RAND() LIMIT 1);
+        set destino=(SELECT codigoAeropuerto FROM AeropuertoExterno ORDER BY RAND() LIMIT 1);
+        
+        /*Posible formato de idVuelo: CONCAT(aerolinea,1000 + iterador_vuelo)*/
+        INSERT INTO Vuelo values(NULL, aerolinea, origen, destino);
+		
+        set iterador_vuelo=iterador_vuelo+1;
+    end while;    
+    
+    /*Autorizar aerolineas a operar en los aeropuertos donde creamos los vuelos*/
+    INSERT INTO Aerolinea_Aeropuerto
+    SELECT DISTINCT codigoAerolinea, codigoAeropuertoOrigen as codigoAeropuerto FROM Vuelo;
     
     
 
