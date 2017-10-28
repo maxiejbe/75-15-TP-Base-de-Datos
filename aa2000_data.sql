@@ -16,8 +16,11 @@ BEGIN
     
     declare personal int(11);
     
-    declare estadoInstancia varchar(20);
-    declare fechaInstancia date;
+    declare estadoInstancia varchar(40);
+    declare numeroEstadoInstancia int(11);
+    declare fechaInstancia date;    
+    declare aeronave varchar(6);
+    declare puertaSalida int(11);
     
     declare cantidad_filas int unsigned default 1;
     declare cantidad_columnas int unsigned default 1;
@@ -333,11 +336,43 @@ BEGIN
         set fechaInstancia = (SELECT TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN));
 		set personal = (SELECT idPersonal FROM Personal ORDER BY RAND() LIMIT 1);
         
-        /*Posible formato de idVuelo: CONCAT(aerolinea,1000 + iterador_vuelo)*/
         INSERT INTO InstanciaVuelo values(NULL, fechaInstancia, fechaInstancia, fechaInstancia, 40, personal, ROUND((RAND() * (100-1))+1));
 		
+        IF fechaInstancia >= now() THEN
+			set numeroEstadoInstancia = (1 + FLOOR(RAND()*9));
+			set estadoInstancia = ELT(numeroEstadoInstancia, 'APERTURA_INSTANCIA_VUELO', 'ASOCIACION_AERONAVE', 'AERONAVE_HABILITADA', 'HABILITACION_PUERTA', 'CARGA_COMBUSTIBLE', 'CARGA_PASAJERO', 'DESPACHADO', 'DESPEGUE', 'CANCELADO');
+        END IF;
+        
+        IF fechaInstancia < now() THEN
+			set numeroEstadoInstancia = 9;
+            set estadoInstancia = 'DESPEGUE';
+        END IF;
+        
+        INSERT INTO RegistroInstanciaVuelo VALUES(NULL, estadoInstancia, iterador_instancia_vuelo);
+        
+        set puertaSalida = ROUND((RAND() * (5-1))+1);
+        
+        IF numeroEstadoInstancia >= 1 THEN
+			INSERT INTO AperturaVuelo VALUES(NULL, puertaSalida, iterador_instancia_vuelo);
+        END IF;
+        
+        IF numeroEstadoInstancia >= 2 THEN
+			set aeronave = (SELECT matriculaAeronave FROM Aeronave ORDER BY RAND() LIMIT 1);
+			INSERT INTO AsociacionAeronave VALUES(NULL, aeronave, iterador_instancia_vuelo);
+        END IF;
+        
+		IF numeroEstadoInstancia >= 4 THEN
+			INSERT INTO HabilitacionPuerta VALUES(NULL, puertaSalida, iterador_instancia_vuelo);
+        END IF;
+        
+        IF numeroEstadoInstancia = 8 THEN
+			INSERT INTO RegistroDespegue VALUES(NULL, 100, 100, 'DESPEGADO', iterador_instancia_vuelo);
+        END IF;
+        
+        
         set iterador_instancia_vuelo=iterador_instancia_vuelo+1;
     end while;    
+    
     
 
 END //

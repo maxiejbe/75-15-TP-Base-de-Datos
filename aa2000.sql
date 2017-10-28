@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS InstanciaVuelo (
 
 CREATE TABLE IF NOT EXISTS RegistroInstanciaVuelo (
   idRegistroInstanciaVuelo int(11) NOT NULL AUTO_INCREMENT,
-  estado varchar(20) NOT NULL,
+  estado varchar(40) NOT NULL,
   idInstanciaVuelo int(11) not null,
   PRIMARY KEY (idRegistroInstanciaVuelo),
   FOREIGN KEY fk_InstanciaVuelo(idInstanciaVuelo) REFERENCES InstanciaVuelo(idInstanciaVuelo)
