@@ -268,8 +268,8 @@ CREATE TABLE IF NOT EXISTS Bulto (
 CREATE TABLE IF NOT EXISTS Reserva (
   codigoReserva int(11) NOT NULL AUTO_INCREMENT,
   estado varchar(20) NOT NULL,
-  fechaConfirmacion DATE NOT NULL,
-  fechaCancelacion DATE NOT NULL,
+  fechaConfirmacion DATE,
+  fechaCancelacion DATE,
   clase varchar(20) NOT NULL,
   idPasajero int(11) not null,
   idInstanciaVuelo int(11) not null,
