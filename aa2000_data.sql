@@ -1,7 +1,10 @@
 DELIMITER //
 CREATE PROCEDURE Cargar_datos_iniciales()
 BEGIN
-	declare iterador_fila int unsigned default 1;
+	declare cantidad_instancias_vuelo int unsigned default 30;
+    declare cantidad_checkins_reservas int unsigned default 10;
+    
+    declare iterador_fila int unsigned default 1;
     declare iterador_columna int unsigned default 1;
     declare iterador_aeronave int unsigned default 1;
     declare iterador_layout int unsigned default 1;
@@ -342,7 +345,7 @@ BEGIN
     end while;
 
     
-    while iterador_instancia_vuelo <= 1000 do	    
+    while iterador_instancia_vuelo <= cantidad_instancias_vuelo do	    
         /*
 		Cargar al menos 1000 instancias de vuelos, distribuidos aleatoriamente entre
 		las fechas 01-07-2017 y 31-12-2017. Contemplar la carga de todos los estados
@@ -399,40 +402,26 @@ BEGIN
         /*set claseReserva = ELT((1 + FLOOR(RAND()*3)), 'TURISTA', 'BUSINESS', 'PRIMERA_CLASE');*/
         set claseReserva = 'TURISTA';
         
-		IF fechaInstancia >= now() THEN
-			set cantidadReservas = 30;
-            
-            INSERT INTO Reserva
-			SELECT NULL, 'CONFIRMADA' as estado, fechaInstancia as fechaConfirmacion, 
-				NULL as fechaCancelacion, claseReserva as clase, p.idPasajero, iterador_instancia_vuelo as idInstanciaVuelo
-			FROM Pasajero p ORDER BY rand() limit cantidadReservas;
+		set iterador_checkin=1;
+		while iterador_checkin <= cantidad_checkins_reservas do	    
+			/*'PENDIENTE', 'DESPACHADO'*/
+			set estadoCheckin = ELT((1 + FLOOR(RAND()*2)), 'ABORDAJE', 'INHIBIDO');
+			set asiento = (SELECT codigoAsiento FROM Asiento ORDER BY RAND() LIMIT 1);
+			set pasajero = (SELECT idPasajero FROM Pasajero ORDER BY RAND() LIMIT 1);
+			set personal = (SELECT idPersonal FROM Personal ORDER BY RAND() LIMIT 1);
 			
-        END IF;
-        
-        IF fechaInstancia < now() THEN
-			set cantidadReservas = 60;
-            
-            set iterador_checkin=1;
-			while iterador_checkin <= cantidadReservas do	    
-				/*'PENDIENTE', 'DESPACHADO'*/
-				set estadoCheckin = ELT((1 + FLOOR(RAND()*2)), 'ABORDAJE', 'INHIBIDO');
-				set asiento = (SELECT codigoAsiento FROM Asiento ORDER BY RAND() LIMIT 1);
-				set pasajero = (SELECT idPasajero FROM Pasajero ORDER BY RAND() LIMIT 1);
-				set personal = (SELECT idPersonal FROM Personal ORDER BY RAND() LIMIT 1);
-				
-                INSERT INTO Reserva VALUES (NULL, 'CONFIRMADA', fechaInstancia, NULL, claseReserva, pasajero, iterador_instancia_vuelo);
-                INSERT INTO CheckIn VALUES (NULL, estadoCheckin, pasajero, iterador_instancia_vuelo, asiento);
-                set idCheckin = LAST_INSERT_ID();
-                INSERT INTO CheckInPresencial VALUES(NULL, idCheckin, personal,ROUND((RAND() * (3-1))+1));
-                
-                IF estadoCheckin = 'ABORDAJE' THEN
-					INSERT INTO DespachoEquipaje VALUES (NULL, idCheckin, personal, ROUND((RAND() * (3-1))+1), fechaInstancia);
-                    INSERT INTO Bulto VALUES (NULL, LAST_INSERT_ID(), 5);
-                END IF;
-                
-				set iterador_checkin=iterador_checkin+1;
-            end while;
-        END IF;
+			INSERT INTO Reserva VALUES (NULL, 'CONFIRMADA', fechaInstancia, NULL, claseReserva, pasajero, iterador_instancia_vuelo);
+			INSERT INTO CheckIn VALUES (NULL, estadoCheckin, pasajero, iterador_instancia_vuelo, asiento);
+			set idCheckin = LAST_INSERT_ID();
+			INSERT INTO CheckInPresencial VALUES(NULL, idCheckin, personal,ROUND((RAND() * (3-1))+1));
+			
+			IF estadoCheckin = 'ABORDAJE' THEN
+				INSERT INTO DespachoEquipaje VALUES (NULL, idCheckin, personal, ROUND((RAND() * (3-1))+1), fechaInstancia);
+				INSERT INTO Bulto VALUES (NULL, LAST_INSERT_ID(), 5);
+			END IF;
+			
+			set iterador_checkin=iterador_checkin+1;
+		end while;
         
         set iterador_instancia_vuelo=iterador_instancia_vuelo+1;
     end while;    
