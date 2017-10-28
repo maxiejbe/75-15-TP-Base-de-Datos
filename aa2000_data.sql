@@ -119,3 +119,14 @@ INSERT INTO AeropuertoArgentino VALUES (NULL, 'Viedma', '', '', '', 'VDM');
 
 INSERT INTO Aeropuerto VALUES ('VME', 'Villa Mercedes', '');
 INSERT INTO AeropuertoArgentino VALUES (NULL, 'Villa Mercedes', '', '', '', 'VME');
+
+/*Terminales de autocheckin*/
+INSERT INTO TerminalAutogestion VALUES(1);
+INSERT INTO TerminalAutogestion VALUES(2);
+INSERT INTO TerminalAutogestion VALUES(3);
+
+/*Terminales fisicas (checkin y despacho de equipaje)*/
+INSERT INTO TerminalFisica VALUES(1);
+INSERT INTO TerminalFisica VALUES(2);
+INSERT INTO TerminalFisica VALUES(3);
+
