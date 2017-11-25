@@ -34,11 +34,27 @@ BEGIN
 	LEFT JOIN aa2000.Layout l ON l.codigoLayout = a.codigoLayout
 	LEFT JOIN aa2000.HabilitacionPuerta hp ON hp.idRegistroInstanciaVuelo = riv.idRegistroInstanciaVuelo;
 	
+    /*Cargo la dimensión de tiempo*/
+    INSERT INTO Tiempo
+    SELECT DISTINCT 
+		NULL,
+        DAY(ci.fecha), MONTH(ci.fecha), 
+		CASE 
+		  WHEN MONTH(ci.fecha) IN (1,2,3) THEN 1
+		  WHEN MONTH(ci.fecha) IN (4,5,6) THEN 2
+		  WHEN MONTH(ci.fecha) IN (7,8,9) THEN 3
+		  WHEN MONTH(ci.fecha) IN (10,11,12) THEN 4 ELSE NULL 
+		END,
+		YEAR(ci.fecha),
+    ci.fecha
+    FROM aa2000.CheckIn ci;
+	
     /*Cargo la tabla de hechos de checkins*/
 	INSERT INTO CheckIn
 	SELECT 
 		ci.idCheckIn, ci.estado, ci.idPasajero, ci.idInstanciaVuelo,
-		ci.fecha, de.fecha,
+		-- ci.fecha,
+        (SELECT idTiempo FROM Tiempo t WHERE t.fechaCompleta = ci.fecha),
 		COUNT(b.idBulto) as cantidadBultos,
 		SUM(b.peso) as pesoTotalBultos
 	FROM aa2000.CheckIn ci

@@ -45,11 +45,13 @@ CREATE TABLE IF NOT EXISTS InstanciaVuelo (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS Tiempo (
-  idTiempo int(11) NOT NULL,
+  idTiempo int(11) NOT NULL AUTO_INCREMENT,
   dia int NOT NULL,
   mes int NOT NULL,
   trimestre int NOT NULL,
-  ano int NOT NULL
+  ano int NOT NULL,
+  fechaCompleta date NOT NULL,
+  PRIMARY KEY (idTiempo)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS CheckIn (
@@ -57,8 +59,8 @@ CREATE TABLE IF NOT EXISTS CheckIn (
   estado VARCHAR(50) NOT NULL,
   idPasajero int(11) NOT NULL,
   idInstanciaVuelo int(11) NOT NULL,
-  fecha	DATE NOT NULL,
-  fechaDespacho	DATE,
+  idTiempo int(11) NOT NULL,
+  -- fecha	DATE NOT NULL,
   cantidadTotalBultos int(11),
   pesoTotalBultos DOUBLE,
   
