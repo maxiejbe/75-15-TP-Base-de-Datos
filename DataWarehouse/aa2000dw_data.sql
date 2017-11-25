@@ -14,11 +14,11 @@ BEGIN
     
     /*Cargo la dimensión de vuelo*/
 	SELECT 
-		l.nombre as nombreLayout,
+		iv.idInstanciaVuelo, iv.fechaInstancia, iv.fechaSalida, 
+		v.idVuelo, v.codigoAerolinea, v.codigoAeropuertoOrigen, v.codigoAeropuertoDestino,
+        l.nombre as nombreLayout,
 		l.cantidadFilas * l.cantidadColumnas as cantidadAsientos,
 		a.matriculaAeronave,
-		v.idVuelo, v.codigoAerolinea, v.codigoAeropuertoOrigen, v.codigoAeropuertoDestino,
-		iv.idInstanciaVuelo, iv.fechaInstancia, iv.fechaSalida, 
 		riv.estado, 
 		hp.puertaSalidaConfirmada 
 	FROM aa2000.InstanciaVuelo iv
