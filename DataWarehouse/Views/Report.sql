@@ -11,7 +11,7 @@ SELECT
     SUM(ci.cantidadTotalBultos) as cantidadBultosDespachados,
     SUM(ci.pesoTotalBultos) as pesoTotalBultosDespachados,
     AVG(ci.pesoTotalBultos / ci.cantidadTotalBultos) as pesoPromedioBultosDespachados,
-    AVG(TIMEDIFF(iv.fechaSalida,ci.fecha)) as promedioTiempoCheckInDespegue
+    avg(timestampdiff(HOUR, fecha, iv.fechaSalida)) AS promedioEnHorasTiempoCheckInDespegue
 FROM
 	CheckIn ci
 INNER JOIN

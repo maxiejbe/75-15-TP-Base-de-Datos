@@ -38,14 +38,14 @@ BEGIN
 	INSERT INTO CheckIn
 	SELECT 
 		ci.idCheckIn, ci.estado, ci.idPasajero, ci.idInstanciaVuelo,
-		now(), now(),
+		ci.fecha, de.fecha,
 		COUNT(b.idBulto) as cantidadBultos,
 		SUM(b.peso) as pesoTotalBultos
 	FROM aa2000.CheckIn ci
 	LEFT JOIN aa2000.Abordaje ab ON ab.idCheckIn = ci.idCheckIn
 	LEFT JOIN aa2000.DespachoEquipaje de ON de.idCheckIn = ci.idCheckIn
 	LEFT JOIN aa2000.Bulto b ON b.idDespachoEquipaje = de.idDespachoEquipaje
-	GROUP BY ci.idCheckIn, ci.estado, ci.idPasajero, ci.idInstanciaVuelo;
+	GROUP BY ci.idCheckIn, ci.estado, ci.idPasajero, ci.idInstanciaVuelo, ci.fecha, de.fecha;
 
 END //
 DELIMITER ;

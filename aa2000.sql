@@ -166,6 +166,7 @@ CREATE TABLE IF NOT EXISTS CheckIn (
   idPasajero int(11) NOT NULL,
   idInstanciaVuelo int(11) NOT NULL,
   codigoAsiento int(11),
+  fecha date not null,
   PRIMARY KEY (idCheckIn),
   FOREIGN KEY fk_Pasajero(idPasajero) REFERENCES Pasajero(idPasajero),
   FOREIGN KEY fk_InstanciaVuelo(idInstanciaVuelo) REFERENCES InstanciaVuelo(idInstanciaVuelo),

@@ -44,13 +44,21 @@ CREATE TABLE IF NOT EXISTS InstanciaVuelo (
   FOREIGN KEY fk_Aeropuerto_Destino(codigoAeropuertoDestino) REFERENCES Aeropuerto(codigoAeropuerto)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE IF NOT EXISTS Tiempo (
+  idTiempo int(11) NOT NULL,
+  dia int NOT NULL,
+  mes int NOT NULL,
+  trimestre int NOT NULL,
+  ano int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE IF NOT EXISTS CheckIn (
   idCheckIn int(11) NOT NULL,
   estado VARCHAR(50) NOT NULL,
   idPasajero int(11) NOT NULL,
   idInstanciaVuelo int(11) NOT NULL,
   fecha	DATE NOT NULL,
-  fechaDespacho	DATE NOT NULL,
+  fechaDespacho	DATE,
   cantidadTotalBultos int(11),
   pesoTotalBultos DOUBLE,
   

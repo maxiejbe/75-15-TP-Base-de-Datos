@@ -29,6 +29,7 @@ BEGIN
     declare aeronave varchar(6);
     declare puertaSalida int(11);
     
+    declare fechaCheckIn date;
     declare estadoCheckin varchar(20);
     declare asiento int(11);
     declare pasajero int(11);
@@ -411,7 +412,9 @@ BEGIN
 			set personal = (SELECT idPersonal FROM Personal ORDER BY RAND() LIMIT 1);
 			
 			INSERT INTO Reserva VALUES (NULL, 'CONFIRMADA', fechaInstancia, NULL, claseReserva, pasajero, iterador_instancia_vuelo);
-			INSERT INTO CheckIn VALUES (NULL, estadoCheckin, pasajero, iterador_instancia_vuelo, asiento);
+			
+            set fechaCheckIn = ELT((1 + FLOOR(RAND()*3)), date_sub(fechaInstancia,interval 1 day), date_sub(fechaInstancia,interval 2 day), fechaInstancia);
+			INSERT INTO CheckIn VALUES (NULL, estadoCheckin, pasajero, iterador_instancia_vuelo, asiento, fechaCheckIn);
 			set idCheckin = LAST_INSERT_ID();
 			INSERT INTO CheckInPresencial VALUES(NULL, idCheckin, personal,ROUND((RAND() * (3-1))+1));
 			
