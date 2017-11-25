@@ -1,0 +1,3 @@
+CREATE DATABASE IF NOT EXISTS aa2000dw;
+use aa2000dw;
+
