@@ -33,27 +33,26 @@ CREATE TABLE IF NOT EXISTS InstanciaVuelo (
   codigoAerolinea varchar(2) not null,
   codigoAeropuertoOrigen varchar(3) not null,
   codigoAeropuertoDestino varchar(3) not null,
-  nombreLayout varchar(20) not null,
-  cantidadAsientos int(11) NOT NULL,
-  matriculaAeronave varchar(6) not null,
+  nombreLayout varchar(20),
+  cantidadAsientos int(11),
+  matriculaAeronave varchar(6),
   estado varchar(40) NOT NULL,
-  puertaSalidaConfirmada int(11) not null,
+  puertaSalidaConfirmada int(11),
   PRIMARY KEY (idInstanciaVuelo),
   FOREIGN KEY fk_Aerolinea(codigoAerolinea) REFERENCES Aerolinea(codigoAerolinea),
   FOREIGN KEY fk_Aeropuerto_Origen(codigoAeropuertoOrigen) REFERENCES Aeropuerto(codigoAeropuerto),
   FOREIGN KEY fk_Aeropuerto_Destino(codigoAeropuertoDestino) REFERENCES Aeropuerto(codigoAeropuerto)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-  
+
 CREATE TABLE IF NOT EXISTS CheckIn (
   idCheckIn int(11) NOT NULL,
   estado VARCHAR(50) NOT NULL,
   idPasajero int(11) NOT NULL,
   idInstanciaVuelo int(11) NOT NULL,
-  codigoAsiento int(11),
   fecha	DATE NOT NULL,
   fechaDespacho	DATE NOT NULL,
   cantidadTotalBultos int(11),
-  pesoTotalBultos DOUBLE NOT NULL,
+  pesoTotalBultos DOUBLE,
   
   PRIMARY KEY (idCheckIn),
   FOREIGN KEY fk_Pasajero(idPasajero) REFERENCES Pasajero(idPasajero),
